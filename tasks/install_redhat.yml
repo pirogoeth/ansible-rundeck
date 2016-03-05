@@ -4,7 +4,7 @@
   yum:
     name: http://repo.rundeck.org/latest.rpm
     state: present
-  sudo: yes
+  become: yes
   tags:
     - rundeck
     - install
@@ -14,9 +14,18 @@
   yum:
     name: rundeck
     state: present
-  sudo: yes
+  become: yes
   notify:
     - start rundeck
+  tags:
+    - rundeck
+    - install
+    - packages
+
+- name: Rundeck | get installed / targeting version
+  shell: "yum info rundeck | grep 'Version' | awk '{print $3}'"
+  become: yes
+  register: rundeck_targeting_version
   tags:
     - rundeck
     - install
